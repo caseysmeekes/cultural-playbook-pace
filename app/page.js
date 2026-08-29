@@ -1,39 +1,51 @@
 'use client'
 
 import { useState } from 'react'
-
-const countries = [
-  { name: 'New Zealand', p: 'Low hierarchy, direct but friendly communication, practical decision making.', a: 'Build trust through authenticity and evidence.', c: 'Clear, informal and conversational.', e: 'Be prepared, pragmatic and avoid unnecessary ceremony.' },
-  { name: 'India', p: 'Hierarchy and relationships can strongly influence business interactions.', a: 'Understand who has influence and who gives final approval.', c: 'Respectful, contextual and relationship-aware.', e: 'Allow time for relationship building and layered decisions.' },
-  { name: 'Indonesia', p: 'Relationships, harmony and status are important in many business settings.', a: 'Identify senior stakeholders and show appropriate respect.', c: 'Polite, indirect and harmony-conscious.', e: 'Be patient, flexible and avoid public confrontation.' },
-  { name: 'Malaysia', p: 'Relationship-led business culture with meaningful attention to hierarchy and harmony.', a: 'Map formal authority alongside informal influence.', c: 'Polite, measured and context-sensitive.', e: 'Prioritise trust, patience and respectful engagement.' },
-  { name: 'Singapore', p: 'Professional, structured and relatively low-context compared with many regional neighbours.', a: 'Demonstrate competence, preparation and commercial credibility.', c: 'Clear, professional and measured.', e: 'Be punctual, prepared and specific.' }
-]
+import { countries, frameworkSections } from '../data/countries'
 
 export default function Home() {
-  const [country, setCountry] = useState(countries[0])
+  const [countryName, setCountryName] = useState('India')
+  const country = countries.find(c => c.name === countryName) || countries[0]
+
   return <main className="wrap">
     <section className="hero"><div className="hero-inner">
       <div className="eyebrow">The Cultural Playbook</div>
       <h1>PACE</h1>
-      <p>A practical Cultural Intelligence tool for preparing to sell, negotiate and work across cultures.</p>
+      <p>Cultural Intelligence for international selling, negotiation and business.</p>
+      <div className="tag hero-tag">Asia prototype · 49 markets</div>
     </div></section>
+
     <section className="content">
-      <div className="panel">
-        <label className="label" htmlFor="country">Select a country</label>
-        <select id="country" className="select" value={country.name} onChange={e => setCountry(countries.find(c => c.name === e.target.value))}>
+      <div className="panel intro">
+        <div>
+          <span className="tag">MARKET DE-CODE</span>
+          <h2>Choose your market</h2>
+          <p>Start with the four PACE lenses. Each section is designed to expand into a deeper commercial playbook.</p>
+        </div>
+        <select id="country" className="select" value={country.name} onChange={e => setCountryName(e.target.value)}>
           {countries.map(c => <option key={c.name}>{c.name}</option>)}
         </select>
       </div>
+
       <div className="panel">
-        <span className="tag">PACE PROFILE</span>
-        <h2>{country.name}</h2>
+        <div className="country-heading"><div><span className="tag">{country.sourceBacked ? 'PLAYBOOK SOURCE DATA' : 'FRAMEWORK READY'}</span><h2>{country.name}</h2></div><span className="country-count">Asia</span></div>
         <div className="grid">
-          <div className="card"><h3>P · Power</h3><p>{country.p}</p></div>
-          <div className="card"><h3>A · Authority</h3><p>{country.a}</p></div>
-          <div className="card"><h3>C · Communication</h3><p>{country.c}</p></div>
-          <div className="card"><h3>E · Expectations</h3><p>{country.e}</p></div>
+          {frameworkSections.map(section => <article className="card" key={section.key}>
+            <div className="letter">{section.letter}</div>
+            <div className="stage">{section.stage}</div>
+            <h3>{section.title}</h3>
+            <p className="question">{section.question}</p>
+            <p>{country[section.key]}</p>
+            <span className="expand">Ready to expand →</span>
+          </article>)}
         </div>
+      </div>
+
+      <div className="panel roadmap">
+        <span className="tag">BUILDING THE PLAYBOOK</span>
+        <h2>Four sections. One commercial view.</h2>
+        <p>The framework maps PACE across the deal: Preparation & Trust at Discovery, Alignment of Power at Pitch & Proposal, Communication Patterns at Negotiation, and Execution & Risk at Closing.</p>
+        <div className="roadmap-grid">{frameworkSections.map(s => <div key={s.key}><strong>{s.letter} · {s.title}</strong><span>{s.stage}</span></div>)}</div>
       </div>
     </section>
   </main>
