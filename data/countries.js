@@ -1,3 +1,5 @@
+import { countryProfiles } from './profiles'
+
 const framework = {
   p: 'Preparation & Trust: How does this market build credibility? Add country-specific trust, relationship and discovery guidance.',
   a: 'Alignment of Power: Who actually holds authority to buy? Add hierarchy, decision rights, seniority and stakeholder guidance.',
@@ -69,7 +71,8 @@ const asia = [
 export const countries = asia.map(name => ({
   name,
   sourceBacked: Boolean(sourced[name]),
-  ...(sourced[name] || framework)
+  ...(sourced[name] || framework),
+  ...(countryProfiles[name] || {})
 }))
 
 export const frameworkSections = [
