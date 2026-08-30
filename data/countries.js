@@ -29,7 +29,8 @@ const globalAdditions = [
   'Finland','Sweden','Norway','Denmark','Estonia','Latvia','Lithuania','Russia',
   'Turkey','Iran','Algeria','Egypt','Lebanon','Libya','Mauritania','Morocco','Oman','Qatar','Saudi Arabia','Sudan','Syria','Tunisia','United Arab Emirates','West Bank and Gaza','Yemen',
   'Iraq','Israel','Hong Kong',
-  'Argentina','Mexico','Brazil','Chile','Venezuela','Colombia'
+  'Argentina','Mexico','Brazil','Chile','Venezuela','Colombia',
+  'Costa Rica','Ecuador','Guatemala','Honduras','Panama','Paraguay','Peru','Uruguay','Ukraine','Belarus'
 ]
 
 const allMarkets = [...new Set([...asia, ...globalAdditions])]
