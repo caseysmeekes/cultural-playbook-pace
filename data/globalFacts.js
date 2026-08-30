@@ -49,5 +49,15 @@ export const globalFacts = {
   'Brazil':['Brazil is the largest country in South America','The Amazon rainforest covers a large part of the country','Football and Carnival are major cultural touchstones'],
   'Chile':['Chile stretches along much of South America’s Pacific coast','The Atacama is one of the driest places on Earth','Chile is famous for wine and seafood'],
   'Venezuela':['Angel Falls is the world’s highest uninterrupted waterfall','Venezuela has a long Caribbean coastline','Baseball is a major sporting tradition'],
-  'Colombia':['Colombia is one of the world’s major coffee producers','The country has Caribbean, Pacific, Andean and Amazonian regions','Cumbia is an important musical tradition']
+  'Colombia':['Colombia is one of the world’s major coffee producers','The country has Caribbean, Pacific, Andean and Amazonian regions','Cumbia is an important musical tradition'],
+  'Costa Rica':['Costa Rica abolished its army in 1948','The country is famous for biodiversity and national parks','Coffee is an important part of its agricultural heritage'],
+  'Ecuador':['The Galápagos Islands are part of Ecuador','The equator passes through the country','Ecuador has Andes, Pacific coast and Amazon regions'],
+  'Guatemala':['Guatemala has major Maya archaeological sites','Lake Atitlán is surrounded by volcanoes','Coffee is an important export and cultural product'],
+  'Honduras':['Honduras has Caribbean and Pacific coastlines','Copán is a major Maya archaeological site','Coffee and bananas are important agricultural exports'],
+  'Panama':['The Panama Canal connects the Atlantic and Pacific oceans','Panama City has a historic Casco Viejo district','The country has a strong maritime and trading identity'],
+  'Paraguay':['Paraguay is one of South America’s landlocked countries','Guaraní is an official language alongside Spanish','Tereré is a popular cold herbal drink'],
+  'Peru':['Machu Picchu is one of the world’s best-known archaeological sites','Peruvian cuisine blends Indigenous, European, African and Asian influences','The Andes run through the country'],
+  'Uruguay':['Uruguay is strongly associated with football','Beef and asado are important food traditions','Montevideo sits on the Río de la Plata'],
+  'Ukraine':['Kyiv is one of Eastern Europe’s historic capitals','Ukrainian embroidery is a major cultural tradition','The country is known for its wheat-growing plains'],
+  'Belarus':['Minsk is the country’s capital and largest city','Belarus has extensive forest and wetland landscapes','Potato-based dishes are prominent in local cuisine']
 }
