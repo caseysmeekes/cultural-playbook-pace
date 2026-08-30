@@ -1,4 +1,5 @@
 import './globals.css'
+import QuickActions from '../components/QuickActions'
 
 export const metadata = {
   title: 'The Cultural Playbook | PACE',
@@ -6,5 +7,5 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
-  return <html lang="en"><body>{children}</body></html>
+  return <html lang="en"><body>{children}<QuickActions /></body></html>
 }
