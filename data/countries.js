@@ -1,4 +1,5 @@
 import { countryProfiles } from './profiles'
+import { globalSourceProfiles } from './globalSourceProfiles'
 
 const framework = {
   p: 'Preparation & Trust: How does this market build credibility? Add country-specific trust, relationship and discovery guidance.',
@@ -21,10 +22,23 @@ const sourced = {
 
 const asia = ['Afghanistan','Armenia','Azerbaijan','Bahrain','Bangladesh','Bhutan','Brunei','Cambodia','China','Cyprus','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Maldives','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Palestine','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Tajikistan','Thailand','Timor-Leste','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen']
 
-export const countries = asia.map(name => ({
+const globalAdditions = [
+  'United States','Canada','Britain','Ireland','Australia','New Zealand','South Africa',
+  'Germany','Austria','Switzerland','Netherlands','Belgium','France','Italy','Spain','Portugal','Greece',
+  'Poland','Hungary','Czech Republic','Slovakia','Slovenia','Croatia','Serbia and Montenegro','Bulgaria','Romania',
+  'Finland','Sweden','Norway','Denmark','Estonia','Latvia','Lithuania','Russia',
+  'Turkey','Iran','Algeria','Egypt','Lebanon','Libya','Mauritania','Morocco','Oman','Qatar','Saudi Arabia','Sudan','Syria','Tunisia','United Arab Emirates','West Bank and Gaza','Yemen',
+  'Iraq','Israel','Hong Kong',
+  'Argentina','Mexico','Brazil','Chile','Venezuela','Colombia'
+]
+
+const allMarkets = [...new Set([...asia, ...globalAdditions])]
+
+export const countries = allMarkets.map(name => ({
   name,
-  sourceBacked: Boolean(sourced[name] || countryProfiles[name]),
+  sourceBacked: Boolean(sourced[name] || countryProfiles[name] || globalSourceProfiles[name]),
   ...(sourced[name] || framework),
+  ...(globalSourceProfiles[name] || {}),
   ...(countryProfiles[name] || {})
 }))
 
