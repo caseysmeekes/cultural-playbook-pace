@@ -1,7 +1,8 @@
 import { countries } from './countries'
 import { countryFacts } from './facts'
 import { globalFacts } from './globalFacts'
-import { pillarGuidance, getActivityApplication } from './pillarGuidance'
+import { getActivityApplication } from './pillarGuidance'
+import { buildCountryDifferentiatedPlay, getScenarioEvidence, getCountryFingerprint } from './differentiationEngine'
 
 export const sourceLevels = {
   deep: 'DEEP SOURCE',
@@ -16,6 +17,7 @@ const activityDefaults = {
   'Negotiation': 'Protect trust while clarifying interests, authority, constraints, evidence and the real path to agreement.',
   'Closing a deal': 'Confirm that the people, evidence and approvals needed for a binding commitment are actually aligned.',
   'New market entry': 'Adapt the go-to-market process to local decision structures, communication patterns, relationships and risk expectations.',
+  'Partnership': 'Build the relationship and operating model around the actual stakeholders, incentives, responsibilities and decision path.',
   'Deal has stalled': 'Diagnose the stall before escalating. Re-check trust, stakeholders, communication signals, approvals and commercial blockers.',
   'Tender / RFP': 'Make the response easy to evaluate across the decision group, with clear evidence, compliance, implementation and risk coverage.',
   'Government engagement': 'Map formal authority, stakeholders, process and accountability while building credibility with the relevant institution.'
@@ -49,6 +51,7 @@ function getSourceStatus(country) {
 
 export function getCountryIntelligence(countryOrName) {
   const country = getCountry(countryOrName)
+  const fingerprint = getCountryFingerprint(country.name)
   return {
     country: country.name,
     region: country.region || 'Global market',
@@ -67,7 +70,9 @@ export function getCountryIntelligence(countryOrName) {
     meeting: country.meeting || country.c,
     signals: country.signals || [],
     doDont: country.doDont || null,
-    facts: getFacts(country)
+    facts: getFacts(country),
+    sourceFingerprint: fingerprint,
+    verifiedEvidenceCount: fingerprint.evidenceCount
   }
 }
 
@@ -82,7 +87,7 @@ export function buildYourPlay({ country: countryOrName, activity = 'First meetin
   const buyer = buyerType ? ` Keep the needs of the ${buyerType.toLowerCase()} in view.` : ''
   const relationship = relationshipStage ? ` You are at the ${relationshipStage.toLowerCase()} stage, so calibrate the next ask accordingly.` : ''
 
-  return {
+  const basePlay = {
     country: country.name,
     activity,
     industry,
@@ -98,53 +103,75 @@ export function buildYourPlay({ country: countryOrName, activity = 'First meetin
     industryLens: industryLenses[industry] || industryLenses.Other,
     sourceConfidence: intelligence.sourceConfidence
   }
+
+  return buildCountryDifferentiatedPlay({
+    country: country.name,
+    scenario: activity,
+    industry,
+    basePlay
+  })
 }
 
 export function buildSignals({ country: countryOrName, activity = 'First meeting', industry = 'Other' } = {}) {
   const country = getCountry(countryOrName)
   const intelligence = getCountryIntelligence(country)
+  const verified = getScenarioEvidence({ country: country.name, scenario: activity })
+  const evidenceByTopic = topic => verified.filter(item => String(item.topic || '').toLowerCase().includes(topic))
+  const relationshipEvidence = evidenceByTopic('relationship')
+  const hierarchyEvidence = verified.filter(item => ['decision-making', 'hierarchy', 'authority'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+  const agreementEvidence = verified.filter(item => ['agreement', 'consensus', 'communication'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+  const decisionEvidence = verified.filter(item => ['decision', 'punctuality', 'time', 'pace'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+  const communicationEvidence = verified.filter(item => ['communication', 'silence', 'meeting'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+  const executionEvidence = verified.filter(item => ['punctuality', 'time', 'process', 'risk', 'negotiation'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+
   return [
     {
       category: 'RELATIONSHIP',
       signal: intelligence.relationship,
       meaning: 'This may indicate how much relationship capital or trust matters before the next commercial ask.',
       test: 'What would help us build enough confidence to take the next step?',
-      action: 'Use the answer to calibrate the amount of relationship-building and commercial pressure.'
+      action: 'Use the answer to calibrate the amount of relationship-building and commercial pressure.',
+      evidenceIds: relationshipEvidence.map(e => e.id)
     },
     {
       category: 'HIERARCHY & AUTHORITY',
       signal: intelligence.hierarchy,
       meaning: 'The visible contact may not be the only person who can influence or approve the decision.',
       test: 'Who else will need to be comfortable with this before the organisation can move forward?',
-      action: 'Map formal authority, influencers, reviewers and potential blockers.'
+      action: 'Map formal authority, influencers, reviewers and potential blockers.',
+      evidenceIds: hierarchyEvidence.map(e => e.id)
     },
     {
       category: 'AGREEMENT & DISAGREEMENT',
       signal: intelligence.communication,
       meaning: 'Agreement, hesitation or disagreement may be expressed differently from your home-market norm.',
       test: 'What specifically would you need to see or resolve before this becomes a firm next step?',
-      action: 'Validate ambiguous signals instead of treating politeness or enthusiasm as commitment.'
+      action: 'Validate ambiguous signals instead of treating politeness or enthusiasm as commitment.',
+      evidenceIds: agreementEvidence.map(e => e.id)
     },
     {
       category: 'DECISION & URGENCY',
       signal: intelligence.decisionMaking,
       meaning: 'The pace of a decision may reflect internal process, stakeholder alignment or risk review rather than lack of interest.',
       test: 'What is the next internal decision point, and who owns it?',
-      action: 'Align your follow-up to the actual decision process rather than applying artificial urgency.'
+      action: 'Align your follow-up to the actual decision process rather than applying artificial urgency.',
+      evidenceIds: decisionEvidence.map(e => e.id)
     },
     {
       category: 'SILENCE & MEETING ENGAGEMENT',
       signal: intelligence.meeting,
       meaning: 'Silence, limited challenge or restrained participation can have several explanations.',
       test: 'Would it be useful to pause here and hear any concerns or questions before we continue?',
-      action: 'Create space for the counterpart to respond without forcing a public position.'
+      action: 'Create space for the counterpart to respond without forcing a public position.',
+      evidenceIds: communicationEvidence.map(e => e.id)
     },
     {
       category: 'NEXT STEPS',
       signal: intelligence.executionRisk,
       meaning: 'Interest only becomes commercially useful when the commitment path is clear.',
       test: 'What needs to happen internally for this to become a firm next step?',
-      action: 'Confirm owner, evidence, approval and timing in a way that fits the buying process.'
+      action: 'Confirm owner, evidence, approval and timing in a way that fits the buying process.',
+      evidenceIds: executionEvidence.map(e => e.id)
     }
   ].map(signal => ({ ...signal, activity, industry }))
 }
@@ -163,6 +190,7 @@ export function buildScenarioBrief({ country: countryOrName, activity = 'First m
     signals: buildSignals({ country, activity, industry }),
     activityContext: activityDefaults[activity] || activityDefaults['First meeting'],
     industryLens: industryLenses[industry] || industryLenses.Other,
+    sourceEvidence: getScenarioEvidence({ country: country.name, scenario: activity }),
     principle: 'Culture gives you a hypothesis. The individual gives you the answer.'
   }
 }
