@@ -1,8 +1,7 @@
 import { countries } from './countries'
 import { countryFacts } from './facts'
 import { globalFacts } from './globalFacts'
-import { getActivityApplication } from './pillarGuidance'
-import { buildCountryDifferentiatedPlay, getScenarioEvidence, getCountryFingerprint } from './differentiationEngine'
+import { buildSourceToPACE } from './sourceToPaceEngine'
 
 export const sourceLevels = {
   deep: 'DEEP SOURCE',
@@ -51,7 +50,6 @@ function getSourceStatus(country) {
 
 export function getCountryIntelligence(countryOrName) {
   const country = getCountry(countryOrName)
-  const fingerprint = getCountryFingerprint(country.name)
   return {
     country: country.name,
     region: country.region || 'Global market',
@@ -60,7 +58,7 @@ export function getCountryIntelligence(countryOrName) {
     pace: { p: country.p, a: country.a, c: country.c, e: country.e },
     preparationTrust: country.p,
     alignmentPower: country.a,
-    communicationPatterns: country.c,
+    communicationPatterns: country.communication || country.c,
     executionRisk: country.e,
     relationship: country.relationship || country.p,
     hierarchy: country.hierarchy || country.a,
@@ -70,128 +68,149 @@ export function getCountryIntelligence(countryOrName) {
     meeting: country.meeting || country.c,
     signals: country.signals || [],
     doDont: country.doDont || null,
-    facts: getFacts(country),
-    sourceFingerprint: fingerprint,
-    verifiedEvidenceCount: fingerprint.evidenceCount
+    facts: getFacts(country)
   }
 }
 
-export function buildYourPlay({ country: countryOrName, activity = 'First meeting', industry = 'Other', buyerType = '', relationshipStage = '' } = {}) {
+export function buildYourPlay({
+  country: countryOrName,
+  activity = 'First meeting',
+  industry = 'Other',
+  buyerType = '',
+  relationshipStage = '',
+  dealStage = '',
+  decisionEnvironment = '',
+  knownChallenge = '',
+  communicationProfile = ''
+} = {}) {
   const country = getCountry(countryOrName)
-  const intelligence = getCountryIntelligence(country)
-  const p = getActivityApplication('p', activity, industry)
-  const a = getActivityApplication('a', activity, industry)
-  const c = getActivityApplication('c', activity, industry)
-  const e = getActivityApplication('e', activity, industry)
-  const context = activityDefaults[activity] || activityDefaults['First meeting']
-  const buyer = buyerType ? ` Keep the needs of the ${buyerType.toLowerCase()} in view.` : ''
-  const relationship = relationshipStage ? ` You are at the ${relationshipStage.toLowerCase()} stage, so calibrate the next ask accordingly.` : ''
+  const application = buildSourceToPACE({
+    country: country.name,
+    scenario: activity,
+    industry,
+    customerType: buyerType,
+    relationshipStage,
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
+    communicationProfile
+  })
 
-  const basePlay = {
+  return {
     country: country.name,
     activity,
     industry,
     buyerType,
     relationshipStage,
-    do: p || intelligence.preparationTrust,
-    dont: `Do not export your home-market default unchanged. ${intelligence.communication}`,
-    ask: `${a || 'Clarify the decision path.'}${buyer}${relationship}`,
-    bring: `Bring evidence that helps the relevant stakeholders evaluate the opportunity. ${intelligence.executionRisk}`,
-    watch: `Watch for signals that could be misread, especially around agreement, silence, authority and timing. ${intelligence.communication}`,
-    next: `Make the next step explicit: owner, action, approval or decision point. ${e || intelligence.executionRisk}`,
-    context,
-    industryLens: industryLenses[industry] || industryLenses.Other,
-    sourceConfidence: intelligence.sourceConfidence
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
+    do: application.play.DO[0],
+    dont: application.play.DON'T.join(' '),
+    ask: application.play.ASK[0],
+    bring: application.play.BRING.join(' '),
+    watch: application.play.WATCH.join(' '),
+    next: application.play.NEXT.join(' '),
+    sourceConfidence: application.sourceConfidence,
+    sourceEvidence: application.sourceEvidence,
+    sourceEvidenceIds: application.sourceIds,
+    sourceTrace: application.pillars.map(p => `${p.name}: ${p.why}`),
+    paceBrief: application
   }
+}
 
-  return buildCountryDifferentiatedPlay({
+export function buildSignals({
+  country: countryOrName,
+  activity = 'First meeting',
+  industry = 'Other',
+  buyerType = '',
+  relationshipStage = '',
+  dealStage = '',
+  decisionEnvironment = '',
+  knownChallenge = '',
+  communicationProfile = ''
+} = {}) {
+  const country = getCountry(countryOrName)
+  const application = buildSourceToPACE({
     country: country.name,
     scenario: activity,
     industry,
-    basePlay
+    customerType: buyerType,
+    relationshipStage,
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
+    communicationProfile
   })
+  return application.signals.map(signal => ({
+    ...signal,
+    activity,
+    industry,
+    buyerType,
+    relationshipStage,
+    dealStage,
+    decisionEnvironment
+  }))
 }
 
-export function buildSignals({ country: countryOrName, activity = 'First meeting', industry = 'Other' } = {}) {
+export function buildScenarioBrief({
+  country: countryOrName,
+  activity = 'First meeting',
+  industry = 'Other',
+  buyerType = '',
+  relationshipStage = '',
+  dealStage = '',
+  decisionEnvironment = '',
+  knownChallenge = '',
+  communicationProfile = ''
+} = {}) {
   const country = getCountry(countryOrName)
   const intelligence = getCountryIntelligence(country)
-  const verified = getScenarioEvidence({ country: country.name, scenario: activity })
-  const evidenceByTopic = topic => verified.filter(item => String(item.topic || '').toLowerCase().includes(topic))
-  const relationshipEvidence = evidenceByTopic('relationship')
-  const hierarchyEvidence = verified.filter(item => ['decision-making', 'hierarchy', 'authority'].some(term => String(item.topic || '').toLowerCase().includes(term)))
-  const agreementEvidence = verified.filter(item => ['agreement', 'consensus', 'communication'].some(term => String(item.topic || '').toLowerCase().includes(term)))
-  const decisionEvidence = verified.filter(item => ['decision', 'punctuality', 'time', 'pace'].some(term => String(item.topic || '').toLowerCase().includes(term)))
-  const communicationEvidence = verified.filter(item => ['communication', 'silence', 'meeting'].some(term => String(item.topic || '').toLowerCase().includes(term)))
-  const executionEvidence = verified.filter(item => ['punctuality', 'time', 'process', 'risk', 'negotiation'].some(term => String(item.topic || '').toLowerCase().includes(term)))
+  const application = buildSourceToPACE({
+    country: country.name,
+    scenario: activity,
+    industry,
+    customerType: buyerType,
+    relationshipStage,
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
+    communicationProfile
+  })
+  const play = buildYourPlay({
+    country,
+    activity,
+    industry,
+    buyerType,
+    relationshipStage,
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
+    communicationProfile
+  })
 
-  return [
-    {
-      category: 'RELATIONSHIP',
-      signal: intelligence.relationship,
-      meaning: 'This may indicate how much relationship capital or trust matters before the next commercial ask.',
-      test: 'What would help us build enough confidence to take the next step?',
-      action: 'Use the answer to calibrate the amount of relationship-building and commercial pressure.',
-      evidenceIds: relationshipEvidence.map(e => e.id)
-    },
-    {
-      category: 'HIERARCHY & AUTHORITY',
-      signal: intelligence.hierarchy,
-      meaning: 'The visible contact may not be the only person who can influence or approve the decision.',
-      test: 'Who else will need to be comfortable with this before the organisation can move forward?',
-      action: 'Map formal authority, influencers, reviewers and potential blockers.',
-      evidenceIds: hierarchyEvidence.map(e => e.id)
-    },
-    {
-      category: 'AGREEMENT & DISAGREEMENT',
-      signal: intelligence.communication,
-      meaning: 'Agreement, hesitation or disagreement may be expressed differently from your home-market norm.',
-      test: 'What specifically would you need to see or resolve before this becomes a firm next step?',
-      action: 'Validate ambiguous signals instead of treating politeness or enthusiasm as commitment.',
-      evidenceIds: agreementEvidence.map(e => e.id)
-    },
-    {
-      category: 'DECISION & URGENCY',
-      signal: intelligence.decisionMaking,
-      meaning: 'The pace of a decision may reflect internal process, stakeholder alignment or risk review rather than lack of interest.',
-      test: 'What is the next internal decision point, and who owns it?',
-      action: 'Align your follow-up to the actual decision process rather than applying artificial urgency.',
-      evidenceIds: decisionEvidence.map(e => e.id)
-    },
-    {
-      category: 'SILENCE & MEETING ENGAGEMENT',
-      signal: intelligence.meeting,
-      meaning: 'Silence, limited challenge or restrained participation can have several explanations.',
-      test: 'Would it be useful to pause here and hear any concerns or questions before we continue?',
-      action: 'Create space for the counterpart to respond without forcing a public position.',
-      evidenceIds: communicationEvidence.map(e => e.id)
-    },
-    {
-      category: 'NEXT STEPS',
-      signal: intelligence.executionRisk,
-      meaning: 'Interest only becomes commercially useful when the commitment path is clear.',
-      test: 'What needs to happen internally for this to become a firm next step?',
-      action: 'Confirm owner, evidence, approval and timing in a way that fits the buying process.',
-      evidenceIds: executionEvidence.map(e => e.id)
-    }
-  ].map(signal => ({ ...signal, activity, industry }))
-}
-
-export function buildScenarioBrief({ country: countryOrName, activity = 'First meeting', industry = 'Other', buyerType = '', relationshipStage = '' } = {}) {
-  const country = getCountry(countryOrName)
-  const intelligence = getCountryIntelligence(country)
-  const play = buildYourPlay({ country, activity, industry, buyerType, relationshipStage })
   return {
     ...intelligence,
     activity,
     industry,
     buyerType,
     relationshipStage,
-    play,
-    signals: buildSignals({ country, activity, industry }),
+    dealStage,
+    decisionEnvironment,
+    knownChallenge,
     activityContext: activityDefaults[activity] || activityDefaults['First meeting'],
     industryLens: industryLenses[industry] || industryLenses.Other,
-    sourceEvidence: getScenarioEvidence({ country: country.name, scenario: activity }),
-    principle: 'Culture gives you a hypothesis. The individual gives you the answer.'
+    play,
+    signals: application.signals,
+    sourceEvidence: application.sourceEvidence,
+    sourceEvidenceIds: application.sourceIds,
+    sourceConfidence: application.sourceConfidence,
+    paceBrief: application,
+    preparationTrust: application.pillars[0].apply,
+    alignmentPower: application.pillars[1].apply,
+    communicationPatterns: application.pillars[2].apply,
+    executionRisk: application.pillars[3].apply,
+    principle: application.principle
   }
 }
 
