@@ -1,2 +1,1 @@
-export default function CQGuardrail(){return <div className="cq-guardrail"><b>PACE PRINCIPLE</b><span>Culture gives you a hypothesis. The individual gives you the answer.</span></div>}
-
+export default function CQGuardrail(){return <div className="cq-guardrail"><b>PACE PRINCIPLE</b><span>Culture gives you a hypothesis. The individual gives you the answer.</span><small>Use cultural guidance to form a hypothesis, then validate the individual and organisation in front of you.</small></div>}
