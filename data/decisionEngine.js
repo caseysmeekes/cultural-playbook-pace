@@ -3,11 +3,7 @@ import { countryFacts } from './facts'
 import { globalFacts } from './globalFacts'
 import { buildSourceToPACE } from './sourceToPaceEngine'
 
-export const sourceLevels = {
-  deep: 'DEEP SOURCE',
-  informed: 'SOURCE INFORMED',
-  ready: 'FRAMEWORK READY'
-}
+export const sourceLevels = { deep: 'DEEP SOURCE', informed: 'SOURCE INFORMED', ready: 'FRAMEWORK READY' }
 
 const activityDefaults = {
   'First meeting': 'Use the first interaction to learn how credibility, authority and communication work before forcing a commercial outcome.',
@@ -37,16 +33,8 @@ function getCountry(countryOrName) {
   if (typeof countryOrName === 'object' && countryOrName?.name) return countryOrName
   return countries.find(c => c.name === countryOrName) || countries[0]
 }
-
-function getFacts(country) {
-  return countryFacts[country.name] || globalFacts[country.name] || []
-}
-
-function getSourceStatus(country) {
-  if (country.sourceLevel) return country.sourceLevel
-  if (country.sourceBacked) return sourceLevels.informed
-  return sourceLevels.ready
-}
+function getFacts(country) { return countryFacts[country.name] || globalFacts[country.name] || [] }
+function getSourceStatus(country) { return country.sourceLevel || (country.sourceBacked ? sourceLevels.informed : sourceLevels.ready) }
 
 export function getCountryIntelligence(countryOrName) {
   const country = getCountry(countryOrName)
@@ -72,45 +60,30 @@ export function getCountryIntelligence(countryOrName) {
   }
 }
 
-export function buildYourPlay({
-  country: countryOrName,
-  activity = 'First meeting',
-  industry = 'Other',
-  buyerType = '',
-  relationshipStage = '',
-  dealStage = '',
-  decisionEnvironment = '',
-  knownChallenge = '',
-  communicationProfile = ''
-} = {}) {
-  const country = getCountry(countryOrName)
-  const application = buildSourceToPACE({
-    country: country.name,
-    scenario: activity,
-    industry,
-    customerType: buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
-    communicationProfile
-  })
+function makeApplication(args) { return buildSourceToPACE({ ...args, country: getCountry(args.country).name }) }
 
+export function buildYourPlay(args = {}) {
+  const country = getCountry(args.country)
+  const activity = args.activity || 'First meeting'
+  const industry = args.industry || 'Other'
+  const application = makeApplication({ ...args, country, scenario: activity, industry })
   return {
     country: country.name,
     activity,
     industry,
-    buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
+    buyerType: args.buyerType || '',
+    relationshipStage: args.relationshipStage || '',
+    dealStage: args.dealStage || '',
+    decisionEnvironment: args.decisionEnvironment || '',
+    knownChallenge: args.knownChallenge || '',
     do: application.play.DO[0],
     dont: application.play.DON'T.join(' '),
     ask: application.play.ASK[0],
     bring: application.play.BRING.join(' '),
     watch: application.play.WATCH.join(' '),
     next: application.play.NEXT.join(' '),
+    context: activityDefaults[activity] || activityDefaults['First meeting'],
+    industryLens: industryLenses[industry] || industryLenses.Other,
     sourceConfidence: application.sourceConfidence,
     sourceEvidence: application.sourceEvidence,
     sourceEvidenceIds: application.sourceIds,
@@ -119,85 +92,28 @@ export function buildYourPlay({
   }
 }
 
-export function buildSignals({
-  country: countryOrName,
-  activity = 'First meeting',
-  industry = 'Other',
-  buyerType = '',
-  relationshipStage = '',
-  dealStage = '',
-  decisionEnvironment = '',
-  knownChallenge = '',
-  communicationProfile = ''
-} = {}) {
-  const country = getCountry(countryOrName)
-  const application = buildSourceToPACE({
-    country: country.name,
-    scenario: activity,
-    industry,
-    customerType: buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
-    communicationProfile
-  })
-  return application.signals.map(signal => ({
-    ...signal,
-    activity,
-    industry,
-    buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment
-  }))
+export function buildSignals(args = {}) {
+  const country = getCountry(args.country)
+  const activity = args.activity || 'First meeting'
+  const application = makeApplication({ ...args, country, scenario: activity })
+  return application.signals.map(signal => ({ ...signal, activity, industry: args.industry || 'Other', buyerType: args.buyerType || '', relationshipStage: args.relationshipStage || '', dealStage: args.dealStage || '', decisionEnvironment: args.decisionEnvironment || '' }))
 }
 
-export function buildScenarioBrief({
-  country: countryOrName,
-  activity = 'First meeting',
-  industry = 'Other',
-  buyerType = '',
-  relationshipStage = '',
-  dealStage = '',
-  decisionEnvironment = '',
-  knownChallenge = '',
-  communicationProfile = ''
-} = {}) {
-  const country = getCountry(countryOrName)
-  const intelligence = getCountryIntelligence(country)
-  const application = buildSourceToPACE({
-    country: country.name,
-    scenario: activity,
-    industry,
-    customerType: buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
-    communicationProfile
-  })
-  const play = buildYourPlay({
-    country,
-    activity,
-    industry,
-    buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
-    communicationProfile
-  })
-
+export function buildScenarioBrief(args = {}) {
+  const country = getCountry(args.country)
+  const activity = args.activity || 'First meeting'
+  const industry = args.industry || 'Other'
+  const application = makeApplication({ ...args, country, scenario: activity, industry })
+  const play = buildYourPlay({ ...args, country, activity, industry })
   return {
-    ...intelligence,
+    ...getCountryIntelligence(country),
     activity,
     industry,
-    buyerType,
-    relationshipStage,
-    dealStage,
-    decisionEnvironment,
-    knownChallenge,
+    buyerType: args.buyerType || '',
+    relationshipStage: args.relationshipStage || '',
+    dealStage: args.dealStage || '',
+    decisionEnvironment: args.decisionEnvironment || '',
+    knownChallenge: args.knownChallenge || '',
     activityContext: activityDefaults[activity] || activityDefaults['First meeting'],
     industryLens: industryLenses[industry] || industryLenses.Other,
     play,
