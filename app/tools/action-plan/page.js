@@ -1,0 +1,5 @@
+'use client'
+import {useState} from 'react'
+import {ActionPlan} from '../../../components/PowerLayerV2D'
+import {countries} from '../../../data/countries'
+export default function Page(){const [country,setCountry]=useState('Japan');const [activity,setActivity]=useState('First meeting');const [industry,setIndustry]=useState('Aviation');return <main style={{minHeight:'100vh',background:'#f4f6f8',padding:'24px',fontFamily:'Inter,system-ui,sans-serif'}}><div style={{maxWidth:1000,margin:'auto'}}><div style={{display:'flex',gap:10,marginBottom:12}}><select value={country} onChange={e=>setCountry(e.target.value)}>{countries.map(c=><option key={c.name}>{c.name}</option>)}</select><select value={activity} onChange={e=>setActivity(e.target.value)}>{['First meeting','Pitch / proposal','Negotiation','Partnership','Tender / RFP','Deal has stalled'].map(x=><option key={x}>{x}</option>)}</select><select value={industry} onChange={e=>setIndustry(e.target.value)}>{['Technology','Aviation','Government','Professional Services','Other'].map(x=><option key={x}>{x}</option>)}</select></div><ActionPlan country={country} activity={activity} industry={industry}/></div></main>}
