@@ -77,7 +77,7 @@ export function buildYourPlay(args = {}) {
     decisionEnvironment: args.decisionEnvironment || '',
     knownChallenge: args.knownChallenge || '',
     do: application.play.DO[0],
-    dont: application.play.DON'T.join(' '),
+    dont: application.play.DONT.join(' '),
     ask: application.play.ASK[0],
     bring: application.play.BRING.join(' '),
     watch: application.play.WATCH.join(' '),
