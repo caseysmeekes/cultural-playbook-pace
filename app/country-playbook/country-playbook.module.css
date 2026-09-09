@@ -3,6 +3,24 @@
   font-family: inherit;
 }
 
+:global(.cp2-brand) {
+  width: 172px !important;
+  min-width: 172px !important;
+  height: 54px !important;
+  display: block !important;
+  overflow: hidden !important;
+  border-radius: 8px !important;
+  background: #f8f4ec url('/cultural-playbook-logo.svg') center / contain no-repeat !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-decoration: none !important;
+}
+
+:global(.cp2-brand span) {
+  display: none !important;
+}
+
 :global(.cp2-scenario-grid) {
   display: grid !important;
   grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
@@ -237,6 +255,12 @@
   :global(.cp2-pillar-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
+
+  :global(.cp2-brand) {
+    width: 148px !important;
+    min-width: 148px !important;
+    height: 48px !important;
+  }
 }
 
 @media (max-width: 600px) {
@@ -247,5 +271,11 @@
 
   :global(.cp2-scenario) {
     min-height: 150px !important;
+  }
+
+  :global(.cp2-brand) {
+    width: 132px !important;
+    min-width: 132px !important;
+    height: 44px !important;
   }
 }
