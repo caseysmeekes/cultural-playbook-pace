@@ -1,4 +1,5 @@
 import CountryPlaybook from '../../components/CountryPlaybookV2'
+import styles from './country-playbook.module.css'
 
 export const metadata = {
   title: 'Country Playbook | The Cultural Playbook',
@@ -6,5 +7,5 @@ export const metadata = {
 }
 
 export default function CountryPlaybookPage() {
-  return <CountryPlaybook />
+  return <div className={styles.page}><CountryPlaybook /></div>
 }
