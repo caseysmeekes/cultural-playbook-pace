@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img" aria-label="The Cultural Playbook">
+  <rect width="760" height="300" rx="18" fill="#f8f4ec"/>
+  <g fill="none" stroke="#174b70" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="145" cy="150" r="105"/>
+    <ellipse cx="145" cy="150" rx="50" ry="105"/>
+    <ellipse cx="145" cy="150" rx="82" ry="105"/>
+    <path d="M40 150h210"/>
+    <path d="M53 98c50 24 134 24 184 0"/>
+    <path d="M53 202c50-24 134-24 184 0"/>
+    <path d="M145 45v210"/>
+  </g>
+  <text x="300" y="94" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="#173f61">The</text>
+  <text x="300" y="166" font-family="Georgia, 'Times New Roman', serif" font-size="76" font-weight="700" fill="#1684d8">Cultural</text>
+  <text x="300" y="238" font-family="Georgia, 'Times New Roman', serif" font-size="76" font-weight="700" fill="#173f61">Playbook</text>
+</svg>
