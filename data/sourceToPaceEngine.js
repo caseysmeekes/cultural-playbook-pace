@@ -240,7 +240,7 @@ export function buildSourceToPACE({
 
   const play = {
     DO: pillars.map(p => p.act).slice(0, 3),
-    DON'T: [
+    DONT: [
       'Do not treat a cultural pattern as a rule about the individual.',
       'Do not interpret silence, enthusiasm, hesitation or agreement without testing what it means.',
       'Do not use country guidance to replace stakeholder, commercial or technical discovery.'
