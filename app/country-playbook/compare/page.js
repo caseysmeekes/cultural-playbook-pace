@@ -1,10 +1,7 @@
-import CountryPlaybookComparison from '../../../components/CountryPlaybookComparison'
+import CountryPlaybookCompareView from '../../../components/CountryPlaybookCompareView'
 
-export const metadata = {
-  title: 'Country Playbook Comparison | The Cultural Playbook',
-  description: 'Compare how your business approach may need to change between two countries.'
-}
+export const metadata = { title: 'Country Playbook Comparison | The Cultural Playbook' }
 
 export default function CountryPlaybookComparePage() {
-  return <CountryPlaybookComparison />
+  return <CountryPlaybookCompareView />
 }
