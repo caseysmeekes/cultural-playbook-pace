@@ -1,4 +1,4 @@
-import CountryPlaybook from '../../components/CountryPlaybook'
+import CountryPlaybook from '../../components/CountryPlaybookV2'
 
 export const metadata = {
   title: 'Country Playbook | The Cultural Playbook',
