@@ -2,6 +2,7 @@ import { countries } from './countries'
 import { countryFacts } from './facts'
 import { globalFacts } from './globalFacts'
 import { buildSourceToPACE } from './sourceToPaceEngine'
+import { buildActionableSummary } from './actionableInsights'
 
 export const sourceLevels = { deep: 'DEEP SOURCE', informed: 'SOURCE INFORMED', ready: 'FRAMEWORK READY' }
 
@@ -67,6 +68,7 @@ export function buildYourPlay(args = {}) {
   const activity = args.activity || 'First meeting'
   const industry = args.industry || 'Other'
   const application = makeApplication({ ...args, country, scenario: activity, industry })
+  const actionable = buildActionableSummary({ application, scenario: activity, industry, customerType: args.buyerType || '', dealStage: args.dealStage || '', knownChallenge: args.knownChallenge || '' })
   return {
     country: country.name,
     activity,
@@ -88,7 +90,8 @@ export function buildYourPlay(args = {}) {
     sourceEvidence: application.sourceEvidence,
     sourceEvidenceIds: application.sourceIds,
     sourceTrace: application.pillars.map(p => `${p.name}: ${p.why}`),
-    paceBrief: application
+    paceBrief: application,
+    actionable
   }
 }
 
@@ -117,6 +120,7 @@ export function buildScenarioBrief(args = {}) {
     activityContext: activityDefaults[activity] || activityDefaults['First meeting'],
     industryLens: industryLenses[industry] || industryLenses.Other,
     play,
+    actionable: play.actionable,
     signals: application.signals,
     sourceEvidence: application.sourceEvidence,
     sourceEvidenceIds: application.sourceIds,
