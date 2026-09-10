@@ -1,0 +1,416 @@
+/* PACE Framework UI polish
+   Scoped to the main framework/dashboard classes only.
+   Purpose: improve hierarchy, density, whitespace and responsive behaviour
+   without changing application logic. */
+
+.app {
+  --pace-navy: #071a2d;
+  --pace-blue: #1f78b4;
+  --pace-text: #172131;
+  --pace-muted: #647181;
+  --pace-border: #dfe6ec;
+  --pace-surface: #ffffff;
+  --pace-subtle: #f6f8fa;
+  --pace-radius: 12px;
+  --pace-gap: 16px;
+  min-height: 100vh;
+  background: #f3f6f8;
+  color: var(--pace-text);
+}
+
+.app .topbar {
+  height: 68px;
+  padding: 0 32px;
+  gap: 28px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06);
+}
+
+.app .brand {
+  min-width: 175px;
+  gap: 10px;
+}
+
+.app .brand-mark {
+  font-size: 25px;
+}
+
+.app .brand b,
+.app .brand strong {
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.app .brand strong {
+  font-size: 14px;
+}
+
+.app .nav-title {
+  padding-left: 24px;
+  font-size: 12px;
+}
+
+.app .topbar nav {
+  gap: 28px;
+}
+
+.app .topbar nav .active {
+  padding: 25px 0 22px;
+}
+
+.app .layout {
+  width: min(100%, 1680px);
+  max-width: 1680px;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 22px;
+  padding: 20px 24px 40px;
+}
+
+.app .sidebar {
+  gap: 14px;
+}
+
+.app .side-card,
+.app .panel,
+.app .country-hero {
+  border-color: var(--pace-border);
+  border-radius: var(--pace-radius);
+  box-shadow: 0 2px 10px rgba(23,33,49,.045);
+}
+
+.app .side-card {
+  padding: 19px;
+}
+
+.app .side-card h3 {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 5px 0 16px;
+}
+
+.app .side-card label {
+  margin: 11px 0;
+  font-size: 10px;
+}
+
+.app .side-card select {
+  min-height: 40px;
+  margin-top: 6px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  border-color: #cfd9e2;
+}
+
+.app .side-card select:focus,
+.app input:focus,
+.app button:focus-visible,
+.app select:focus-visible {
+  outline: 3px solid rgba(31,120,180,.16);
+  outline-offset: 1px;
+}
+
+.app .readiness .ring {
+  margin: 14px auto 12px;
+}
+
+.app .outline {
+  min-height: 38px;
+  border-radius: 7px;
+  transition: background .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.app .outline:hover {
+  background: #f3f8fb;
+  box-shadow: 0 3px 10px rgba(23,63,103,.08);
+}
+
+.app .country-hero {
+  min-height: 138px;
+  padding: 24px 28px;
+}
+
+.app .country-title {
+  gap: 15px;
+}
+
+.app .country-title h1 {
+  font-size: clamp(30px, 2.4vw, 38px);
+  line-height: 1;
+}
+
+.app .country-title p {
+  margin: 5px 0 12px;
+  font-size: 11px;
+}
+
+.app .hero-art {
+  font-size: clamp(72px, 7vw, 104px);
+  margin-right: 20px;
+  line-height: .8;
+}
+
+.app .panel {
+  padding: 21px 22px;
+  margin-top: 12px;
+}
+
+.app .panel h2,
+.app .section-head h2 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.app .section-head p,
+.app .panel > p {
+  font-size: 10.5px;
+  line-height: 1.55;
+  margin-top: 5px;
+}
+
+.app .pace-overview {
+  margin-top: 13px;
+}
+
+.app .overview {
+  padding: 9px 17px;
+  min-width: 0;
+}
+
+.app .overview p {
+  font-size: 9.5px;
+  line-height: 1.45;
+  margin: 5px 0 0;
+}
+
+.app .overview small {
+  font-size: 8px;
+}
+
+.app .big-letter {
+  font-size: 35px;
+  line-height: 1;
+}
+
+.app .three-col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.app .three-col .panel {
+  min-height: 0;
+  height: 100%;
+  margin-top: 12px;
+}
+
+.app .facts {
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.app .fact p,
+.app .watch p,
+.app .glance span {
+  font-size: 9.5px;
+}
+
+.app .watch {
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.app .glance {
+  margin-top: 7px;
+}
+
+.app .glance span {
+  padding: 8px 0;
+}
+
+.app .pace-grid {
+  gap: 10px;
+  margin-top: 13px;
+}
+
+.app .pace-card {
+  min-height: 190px;
+  padding: 15px;
+  border-radius: 9px;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.app .pace-card:hover,
+.app .pace-card.selected {
+  transform: translateY(-2px);
+  border-color: #cbd9e3;
+  box-shadow: 0 8px 22px rgba(23,33,49,.09);
+}
+
+.app .pace-card h3 {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.app .pace-card p {
+  font-size: 9px;
+  line-height: 1.48;
+}
+
+.app .pace-card > span {
+  margin-top: 13px;
+  font-size: 9px;
+}
+
+.app .brief-grid {
+  gap: 10px;
+  margin-top: 13px;
+}
+
+.app .brief-grid > div {
+  padding: 12px;
+}
+
+.app .checks {
+  gap: 7px 20px;
+  margin-top: 13px;
+}
+
+.app .checks label {
+  min-height: 38px;
+  padding: 9px 10px;
+}
+
+.app .pause-banner {
+  margin-top: 12px;
+}
+
+.app footer {
+  padding: 18px 20px 28px;
+}
+
+/* Give the framework more usable width on large displays without making
+   content feel stretched. */
+@media (min-width: 1500px) {
+  .app .layout {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .app .layout {
+    grid-template-columns: 255px minmax(0, 1fr);
+  }
+
+  .app .three-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app .three-col .panel:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .app .topbar {
+    padding: 0 18px;
+  }
+
+  .app .layout {
+    display: block;
+    padding: 14px 16px 32px;
+  }
+
+  .app .sidebar {
+    display: block;
+  }
+
+  .app .side-card {
+    margin-bottom: 12px;
+  }
+
+  .app .country-hero {
+    padding: 20px;
+  }
+
+  .app .pace-overview,
+  .app .pace-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .app .topbar {
+    height: 60px;
+    padding: 0 14px;
+  }
+
+  .app .nav-title {
+    display: none;
+  }
+
+  .app .topbar nav {
+    gap: 12px;
+  }
+
+  .app .topbar nav span:not(.active):not(.avatar) {
+    display: none;
+  }
+
+  .app .layout {
+    padding: 10px 10px 28px;
+  }
+
+  .app .country-hero {
+    min-height: 120px;
+    padding: 17px;
+  }
+
+  .app .country-title h1 {
+    font-size: 28px;
+  }
+
+  .app .hero-art {
+    display: none;
+  }
+
+  .app .panel {
+    padding: 17px;
+    margin-top: 10px;
+  }
+
+  .app .three-col,
+  .app .pace-overview,
+  .app .pace-grid,
+  .app .brief-grid,
+  .app .checks {
+    grid-template-columns: 1fr;
+  }
+
+  .app .three-col .panel:last-child {
+    grid-column: auto;
+  }
+
+  .app .overview {
+    border-right: 0;
+    border-bottom: 1px solid #edf0f3;
+    padding: 12px 4px;
+  }
+
+  .app .overview:last-child {
+    border-bottom: 0;
+  }
+
+  .app .pace-card {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app *,
+  .app *::before,
+  .app *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
