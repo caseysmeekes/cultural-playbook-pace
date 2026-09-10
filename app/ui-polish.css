@@ -1,0 +1,249 @@
+:root {
+  --cp-navy: #071a2d;
+  --cp-navy-soft: #103f6c;
+  --cp-blue: #238bd0;
+  --cp-blue-bright: #4da3ff;
+  --cp-ink: #172131;
+  --cp-muted: #657181;
+  --cp-subtle: #8a95a2;
+  --cp-bg: #f4f6f8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f7f9fb;
+  --cp-border: #dfe6ec;
+  --cp-border-soft: #e9edf1;
+  --cp-success: #23814d;
+  --cp-success-bg: #eef8f1;
+  --cp-warning: #986b15;
+  --cp-warning-bg: #fff6dc;
+  --cp-radius-sm: 6px;
+  --cp-radius-md: 9px;
+  --cp-radius-lg: 12px;
+  --cp-shadow-sm: 0 2px 10px rgba(23, 33, 49, 0.06);
+  --cp-shadow-md: 0 8px 24px rgba(23, 33, 49, 0.09);
+  --cp-focus: 0 0 0 3px rgba(77, 163, 255, 0.22);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+select,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+select {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: var(--cp-focus);
+}
+
+button:disabled,
+select:disabled,
+input:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Shared application surfaces */
+.side-card,
+.panel {
+  border-color: var(--cp-border);
+  border-radius: var(--cp-radius-md);
+  box-shadow: var(--cp-shadow-sm);
+}
+
+.side-card select,
+.cp2-card select,
+.cp2-card input,
+input,
+select,
+textarea {
+  min-height: 40px;
+}
+
+.side-card select,
+.cp2-card select,
+.cp2-card input {
+  transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+.side-card select:hover,
+.cp2-card select:hover,
+.cp2-card input:hover {
+  border-color: #bdc9d4;
+}
+
+.side-card select:focus,
+.cp2-card select:focus,
+.cp2-card input:focus {
+  border-color: var(--cp-blue);
+  box-shadow: var(--cp-focus);
+  outline: none;
+}
+
+.outline,
+.qa-primary,
+.pause-side button,
+.pause-banner button,
+.modal button {
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.outline:hover,
+.pause-side button:hover,
+.modal button:hover {
+  transform: translateY(-1px);
+}
+
+.qa-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(7, 26, 45, 0.22);
+}
+
+/* Quick actions should feel like a utility, not a competing navigation system. */
+.qa-menu a,
+.qa-menu button {
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.qa-menu a:hover,
+.qa-menu button:hover {
+  background: #f3f7fa;
+}
+
+.qa-menu a:focus-visible,
+.qa-menu button:focus-visible {
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 0 0 2px rgba(77, 163, 255, 0.35);
+}
+
+/* Country Playbook shared polish. */
+.cp2 {
+  --cp2-border: var(--cp-border);
+  --cp2-shadow: var(--cp-shadow-sm);
+}
+
+.cp2-card,
+.cp2-panel,
+.cp2-hero,
+.cp2-topic {
+  border-color: var(--cp-border) !important;
+  border-radius: var(--cp-radius-lg) !important;
+  box-shadow: var(--cp-shadow-sm) !important;
+}
+
+.cp2-card:hover,
+.cp2-panel:hover,
+.cp2-hero:hover,
+.cp2-topic:hover {
+  box-shadow: var(--cp-shadow-sm) !important;
+}
+
+.cp2-nav button,
+.cp2-nav a,
+.cp2-results button,
+.cp2-index details button,
+.cp2-topic-chips button,
+.cp2-back {
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+
+.cp2-nav button:hover,
+.cp2-nav a:hover,
+.cp2-results button:hover,
+.cp2-index details button:hover,
+.cp2-topic-chips button:hover {
+  transform: translateY(-1px);
+}
+
+.cp2-nav button.active,
+.cp2-results button.active,
+.cp2-index details button.active {
+  font-weight: 800;
+}
+
+.cp2-topic-chips button {
+  min-height: 32px;
+}
+
+.cp2-back:hover {
+  background: #edf4f8;
+  border-color: #c8d6df;
+  transform: translateY(-1px);
+}
+
+.cp2-scenario,
+.cp2-pillar {
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.cp2-scenario:hover,
+.cp2-pillar:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cp-shadow-md);
+  border-color: #c9d8e2;
+}
+
+.cp2-scenario:focus-visible,
+.cp2-pillar:focus-visible {
+  outline: none;
+  box-shadow: var(--cp-focus), var(--cp-shadow-sm);
+}
+
+.cp2-mini-grid > span,
+.cp2-list article,
+.cp2-article-grid article,
+.coverage {
+  border-color: var(--cp-border-soft);
+}
+
+/* Keep the floating utility clear of small screens. */
+@media (max-width: 760px) {
+  .topbar,
+  .cp2-top {
+    min-height: 60px;
+  }
+
+  .layout,
+  .cp2-layout {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .qa-primary {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
