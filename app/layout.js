@@ -1,4 +1,5 @@
 import './globals.css'
+import './ui-polish.css'
 import QuickActions from '../components/QuickActions'
 
 export const metadata = {
